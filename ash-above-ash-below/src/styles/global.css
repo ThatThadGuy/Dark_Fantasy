@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light dark; }
+html { scroll-behavior: smooth; }
+main { min-height: 70vh; }
+
+/* Print tweaks */
+@media print {
+  .no-print { display: none !important; }
+  body { color: black; background: white; }
+}

@@ -1,0 +1,18 @@
+---
+import BaseLayout from './BaseLayout.astro';
+---
+<BaseLayout>
+  <div class="grid md:grid-cols-[1fr_280px] gap-8">
+    <article class="prose dark:prose-invert max-w-none">
+      <slot />
+    </article>
+    <aside class="no-print md:sticky md:top-20 h-max border rounded-2xl p-4">
+      <h2 class="text-sm font-semibold">On this page</h2>
+      <nav id="toc" class="mt-2 text-sm"></nav>
+      <script type="module">
+        import { mountToc } from '../../components/Toc.client.ts';
+        mountToc('#toc');
+      </script>
+    </aside>
+  </div>
+</BaseLayout>

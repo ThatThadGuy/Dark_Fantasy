@@ -1,0 +1,24 @@
+{
+  "name": "ash-above-ash-below",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --source dist",
+    "preview": "astro preview",
+    "lint": "echo 'add linters later'"
+  },
+  "dependencies": {
+    "astro": "^4.10.0",
+    "@astrojs/mdx": "^3.1.0",
+    "@astrojs/tailwind": "^5.1.0",
+    "pagefind": "^1.2.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4"
+  }
+}
