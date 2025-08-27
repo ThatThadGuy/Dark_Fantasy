@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Character Sheet">
+  <h1 class="text-2xl font-bold mb-4">Character Sheet</h1>
+  <div class="no-print mb-4"><button onclick="window.print()" class="rounded-2xl px-4 py-2 border">Print</button></div>
+
+  <form id="sheet" class="grid gap-6 print:gap-3">
+    <section class="grid md:grid-cols-3 gap-4">
+      <label class="block">Name<input name="name" class="border rounded px-2 py-1 w-full" /></label>
+      <label class="block">Archetype<input name="arch" class="border rounded px-2 py-1 w-full" /></label>
+      <label class="block">Ancestry<input name="ancestry" class="border rounded px-2 py-1 w-full" /></label>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold">Attributes</h2>
+      <div class="grid grid-cols-5 gap-2">
+        {['MGT','AGL','WIT','RES','GLM'].map((k) => (
+          <label class="block text-center">
+            <div>{k}</div>
+            <input name={k} type="number" value="0" class="border rounded w-full text-center" />
+          </label>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold">Skills (sum to add to tests)</h2>
+      <textarea name="skills" rows="3" class="border rounded w-full" placeholder="list skills with ratings"></textarea>
+    </section>
+
+    <section class="grid md:grid-cols-3 gap-4">
+      <label class="block">Defense<input name="defense" readonly class="border rounded px-2 py-1 w-full bg-gray-50 dark:bg-gray-800" /></label>
+      <label class="block">Speed<input name="speed" readonly class="border rounded px-2 py-1 w-full bg-gray-50 dark:bg-gray-800" /></label>
+      <label class="block">Inventory Slots<input name="slots" readonly class="border rounded px-2 py-1 w-full bg-gray-50 dark:bg-gray-800" /></label>
+    </section>
+
+    <section class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h2 class="text-lg font-semibold">Stress</h2>
+        <div class="grid grid-cols-10 gap-1">{Array.from({length:20}).map((_,i)=>(<input type="checkbox" />))}</div>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold">Corruption</h2>
+        <div class="grid grid-cols-10 gap-1">{Array.from({length:20}).map((_,i)=>(<input type="checkbox" />))}</div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold">Notes / Relics / Bonds</h2>
+      <textarea rows="6" class="border rounded w-full"></textarea>
+    </section>
+  </form>
+
+  <script>
+    const f = document.getElementById('sheet');
+    const q = (n) => f.querySelector(`[name="${n}"]`);
+    const calc = () => {
+      const MGT = +q('MGT').value||0, AGL = +q('AGL').value||0, WIT = +q('WIT').value||0, RES = +q('RES').value||0, GLM = +q('GLM').value||0;
+      // Placeholder formulas – adjust to your official rules later:
+      q('defense').value = String(10 + AGL);
+      q('speed').value = String(5 + AGL);
+      q('slots').value = String(10 + MGT);
+    };
+    f.addEventListener('input', calc);
+    calc();
+  </script>
+
+  <style>
+    @media print {
+      header, footer, .no-print { display: none !important; }
+      main { padding: 0; }
+      form { gap: 0.5rem; }
+      input, textarea { border: 1px solid #000 !important; }
+    }
+  </style>
+</BaseLayout>

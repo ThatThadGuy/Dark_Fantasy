@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Dice Roller">
+  <h1 class="text-2xl font-bold mb-4">Dice Roller</h1>
+  <form id="roller" class="grid gap-2 max-w-md">
+    <label class="flex items-center justify-between">
+      <span>Attribute</span>
+      <input name="attr" type="number" class="border rounded px-2 py-1 w-24" value="0" />
+    </label>
+    <label class="flex items-center justify-between">
+      <span>Skill</span>
+      <input name="skill" type="number" class="border rounded px-2 py-1 w-24" value="0" />
+    </label>
+    <label class="flex items-center justify-between">
+      <span>Target Number (TN)</span>
+      <input name="tn" type="number" class="border rounded px-2 py-1 w-24" value="12" />
+    </label>
+    <label class="flex items-center gap-2"><input type="checkbox" name="adv" /> Advantage</label>
+    <label class="flex items-center gap-2"><input type="checkbox" name="dis" /> Disadvantage</label>
+    <label class="flex items-center justify-between">
+      <span>Seed (optional)</span>
+      <input name="seed" type="text" class="border rounded px-2 py-1 w-40" placeholder="e.g. table-42" />
+    </label>
+    <div class="flex gap-2 mt-2">
+      <button type="button" id="roll" class="rounded-2xl px-4 py-2 border">Roll</button>
+      <button type="button" id="stress" class="rounded-2xl px-4 py-2 border">+ Stress</button>
+      <button type="button" id="corruption" class="rounded-2xl px-4 py-2 border">+ Corruption</button>
+    </div>
+  </form>
+  <output id="log" class="mt-4 block whitespace-pre border rounded-2xl p-3"></output>
+
+  <script>
+    // Mulberry32 seedable RNG
+    function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
+    function hashStr(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return (h>>>0);}
+    function d20(rand){return Math.floor(rand()*20)+1}
+
+    const form = document.getElementById('roller');
+    const out = document.getElementById('log');
+    let stress = 0, corruption = 0;
+
+    function roll(){
+      const fd = new FormData(form);
+      const attr = Number(fd.get('attr')||0); const skill = Number(fd.get('skill')||0); const tn = Number(fd.get('tn')||12);
+      const adv = fd.get('adv') === 'on'; const dis = fd.get('dis') === 'on';
+      const seed = (fd.get('seed')||'')+''; const rng = seed? mulberry32(hashStr(seed)) : Math.random;
+      const r1 = d20(rng()), r2 = d20(rng());
+      let base = r1, detail = `d20: ${r1}`;
+      if (adv && !dis){ base = Math.max(r1,r2); detail = `d20 (adv): ${r1}, ${r2} → ${base}`; }
+      if (dis && !adv){ base = Math.min(r1,r2); detail = `d20 (dis): ${r1}, ${r2} → ${base}`; }
+      const total = base + attr + skill;
+      const margin = total - tn;
+      const crit = base === 20; const mishap = base === 1;
+      const line = [
+        `Roll → ${detail}`,
+        `Mods: +Attr(${attr}) +Skill(${skill}) = ${total}`,
+        `TN ${tn} → ${margin >= 0 ? 'SUCCESS' : 'FAIL'} (margin ${margin})`,
+        crit ? '⚑ CRITICAL!' : '',
+        mishap ? '⚑ MISHAP!' : '',
+        `Stress:${stress} Corruption:${corruption}`
+      ].filter(Boolean).join('\n');
+      out.textContent = line + '\n\n' + (out.textContent || '');
+    }
+    document.getElementById('roll').addEventListener('click', roll);
+    document.getElementById('stress').addEventListener('click', () => { stress++; roll(); });
+    document.getElementById('corruption').addEventListener('click', () => { corruption++; roll(); });
+  </script>
+</BaseLayout>

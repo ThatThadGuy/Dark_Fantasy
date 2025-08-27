@@ -1,0 +1,21 @@
+---
+const id = 'theme-toggle';
+---
+<button id={id} class="no-print rounded-2xl px-3 py-2 text-sm border shadow-sm">
+  Toggle Theme
+</button>
+<script>
+  const btn = document.getElementById("theme-toggle");
+  const root = document.documentElement;
+  const toggle = () => {
+    const cur = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = cur;
+    localStorage.setItem('aab-theme', cur);
+  };
+  const saved = localStorage.getItem('aab-theme');
+  if (saved) document.documentElement.dataset.theme = saved;
+  btn?.addEventListener('click', toggle);
+</script>
+<style>
+  :root[data-theme='dark'] { color-scheme: dark; }
+</style>

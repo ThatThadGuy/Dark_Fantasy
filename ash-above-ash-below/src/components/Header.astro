@@ -1,0 +1,15 @@
+---
+import DarkModeToggle from './DarkModeToggle.astro';
+---
+<header class="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-black/30 border-b">
+  <div class="mx-auto max-w-5xl px-4 py-3 flex items-center gap-4">
+    <a href="/" class="font-semibold tracking-wide">Ash Above, Ash Below</a>
+    <nav class="ml-auto flex gap-4 text-sm">
+      <a href="/rules/_index" aria-label="Rules">Rules</a>
+      <a href="/tools/roller" aria-label="Roller">Roller</a>
+      <a href="/tools/sheet" aria-label="Character Sheet">Sheet</a>
+      <a href="/search" aria-label="Search">Search</a>
+    </nav>
+    <DarkModeToggle />
+  </div>
+</header>
