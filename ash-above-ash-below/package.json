@@ -16,6 +16,7 @@
     "pagefind": "^1.2.0"
   },
   "devDependencies": {
+    "@vite-pwa/astro": "^1.1.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10",
