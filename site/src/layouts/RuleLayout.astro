@@ -1,0 +1,35 @@
+---
+import Layout from "./Layout.astro";
+---
+<Layout>
+  <div class="grid md:grid-cols-[1fr_280px] gap-8">
+    <article class="prose prose-slate dark:prose-invert max-w-none">
+      <slot />
+    </article>
+
+    <aside class="hidden md:block md:sticky md:top-20 h-max border rounded-2xl p-4 bg-white/70 dark:bg-white/5">
+      <h2 class="text-sm font-semibold mb-2">On this page</h2>
+      <nav id="toc" class="text-sm space-y-1"></nav>
+    </aside>
+  </div>
+
+  <script>
+    // Build a TOC from h2/h3
+    const headings = Array.from(document.querySelectorAll("article h2, article h3"));
+    const toc = document.getElementById("toc");
+    if (toc && headings.length) {
+      const ul = document.createElement("ul");
+      headings.forEach(h => {
+        if (!h.id) h.id = (h.textContent || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        const li = document.createElement("li");
+        if (h.tagName === "H3") li.style.marginLeft = "1rem";
+        const a = document.createElement("a");
+        a.href = "#" + h.id;
+        a.textContent = h.textContent || "";
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      toc.appendChild(ul);
+    }
+  </script>
+</Layout>
