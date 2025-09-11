@@ -1,0 +1,49 @@
+---
+import "../styles/global.css";
+const { title = "Ash Above, Ash Below — Playtest Pack", description = "SRD + Tools" } = Astro.props;
+---
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class="min-h-screen">
+    <header class="sticky top-0 z-50 backdrop-blur bg-white/80 dark:bg-black/30 border-b">
+      <nav class="mx-auto max-w-5xl px-4 py-3 flex items-center gap-4">
+        <a href="/" class="font-semibold tracking-wide">Ash Above, Ash Below</a>
+        <a href="/rules/_index" class="ml-auto">Rules</a>
+        <a href="/search">Search</a>
+        <a href="/tools">Tools</a>
+        <button id="theme-toggle" class="border rounded-2xl px-3 py-1 text-sm">Toggle Theme</button>
+      </nav>
+    </header>
+
+    <main class="relative">
+      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_30%_at_50%_0%,rgba(120,120,140,0.12),transparent)]"></div>
+      <div class="relative mx-auto max-w-5xl px-4 py-8">
+        <slot />
+      </div>
+    </main>
+
+    <footer class="border-t">
+      <div class="mx-auto max-w-5xl px-4 py-6 text-sm opacity-70">
+        © {new Date().getFullYear()} Ash Above, Ash Below — Playtest Pack
+      </div>
+    </footer>
+
+    <script>
+      // Remember theme
+      const key = "aab-theme";
+      const saved = localStorage.getItem(key);
+      if (saved) document.documentElement.dataset.theme = saved;
+      const btn = document.getElementById("theme-toggle");
+      btn?.addEventListener("click", () => {
+        const cur = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = cur;
+        localStorage.setItem(key, cur);
+      });
+    </script>
+  </body>
+</html>

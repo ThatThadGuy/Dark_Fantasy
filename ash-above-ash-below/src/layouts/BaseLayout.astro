@@ -2,7 +2,9 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PWABehaviour from '../components/PWABehaviour.astro';
 const { title = 'Ash Above, Ash Below', description = 'SRD + Tools' } = Astro.props;
+const themeColor = '#1f1f26';
 ---
 <html lang="en" data-theme="light">
   <head>
@@ -10,6 +12,14 @@ const { title = 'Ash Above, Ash Below', description = 'SRD + Tools' } = Astro.pr
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- PWA & Theme Stuff -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content={themeColor} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.svg" />
+
   </head>
   <body class="bg-ash-50 dark:bg-ash-900 text-ash-900 dark:text-ash-100">
     <Header />
@@ -17,5 +27,6 @@ const { title = 'Ash Above, Ash Below', description = 'SRD + Tools' } = Astro.pr
       <slot />
     </main>
     <Footer />
+    <PWABehaviour />
   </body>
 </html>
